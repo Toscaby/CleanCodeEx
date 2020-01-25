@@ -15,8 +15,9 @@ public class PrimeGenerator {
     } else {
       uncrossIntegersUpTo(maxValue);
       crossOutMultiples();
+      putUncrossedIntegersIntoResult();
+      return result;
     }
-    return null;
   }
 
   private static void uncrossIntegersUpTo(int maxValue) {
@@ -30,12 +31,16 @@ public class PrimeGenerator {
     int limit = determineIterationLimit();
     for (int i = 0; i < limit; ++i) {
       if (crossedOut[i]) {
-        //crossOutMultiplesOf
+        crossOutMultiplesOf(i);
       }
     }
   }
 
   private static int determineIterationLimit() {
+    // Every multiple in the array has a prime factor that
+    // is less than or equal to the root of the array size,
+    // so we don't have to cross out multiples of numbers
+    // larger than that root.
     return (int)Math.sqrt(crossedOut.length) + 1;
   }
 
@@ -46,6 +51,25 @@ public class PrimeGenerator {
   }
 
   private static boolean notCrossed(int i) {
-    return crossedOut[i] == false;
+    return !crossedOut[i];
+  }
+
+  private static void putUncrossedIntegersIntoResult() {
+    result = new int[numberOfUncrossedIntegers()];
+    for (int j = 0, i = 2; i < crossedOut.length; ++i) {
+      if (notCrossed(i)) {
+        result[j++] = i;
+      }
+    }
+  }
+
+  private static int numberOfUncrossedIntegers() {
+    int count = 0;
+    for (int i = 2; i < crossedOut.length; i++) {
+      if (notCrossed(i)) {
+        count++;
+      }
+    }
+    return count;
   }
 }
