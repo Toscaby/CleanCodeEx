@@ -8,8 +8,7 @@ public class Principles {
 
   // 紧密相关的代码应该相互靠近
 
-  // 本地变量声明尽可能靠近其使用位置，实体变量在顶部
-
+  // 本地变量声明尽可能靠近其使用位置，实体变量在类顶部
 
   // 相关方法写在一起, eg:
   public class Request {
@@ -78,5 +77,12 @@ public class Principles {
   }
 
   // 概念相关 应当放在一起
+  // e.g. :
+  public void assertFalse(String msg, boolean condition) {}
 
+  public void assertTrue(boolean condition) {
+    assertTrue(null, condition);
+  }
+
+  public void assertTrue(String msg, boolean condition) {}
 }
