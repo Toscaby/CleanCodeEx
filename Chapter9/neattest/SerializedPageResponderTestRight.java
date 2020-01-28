@@ -93,6 +93,7 @@ public class SerializedPageResponderTestRight {
     page.commit(data);
   }
 
+  // todo 断言改为抛异常
   private void assertResponseIsXML() {
     assert "text/xml".equals(response.getContentType());
   }
