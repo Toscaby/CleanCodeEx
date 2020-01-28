@@ -5,6 +5,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 /**
+ * 测试遵循了 构造-操作-检验模式 BUILD-OPERATE-CHECK
  * @author Tosca
  * @date 28/1/2020
  */
