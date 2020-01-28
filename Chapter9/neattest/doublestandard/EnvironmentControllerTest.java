@@ -46,6 +46,7 @@ public class EnvironmentControllerTest {
   }
 
   // after refactor
+  // 重构后的测试代码 简单得多，具有足够的表达力
   @Test
   public void turnOnLoTempAlarmAtThreshold() throws Exception {
     wayTooCold();

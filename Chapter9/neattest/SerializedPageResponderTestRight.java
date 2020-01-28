@@ -25,10 +25,13 @@ public class SerializedPageResponderTestRight {
 
   @Test
   public void testGetPageHierarchyAsXml() throws Exception {
+    // BUILD
     makePages("PageOne", "PageOne.ChildOne", "PageTwo");
 
+    // OPERATE
     submitRequest("root", "type:pages");
 
+    // CHECK
     assertResponseIsXML();
     assertResponseContains("<name>PageOne</name>", "<name>PageTwo</name>", "<name>ChildOne</name>");
   }
