@@ -6,6 +6,7 @@ package Chapter14.onlyboolean;
  */
 public class BooleanArgsTest {
   public static void main(String[] args) {
+    // args: -ldF true
     Args arguments = new Args("Fld", args);
     print("l", arguments.getBoolean('l'));
     print("F", arguments.getBoolean('F'));
