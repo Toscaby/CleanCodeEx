@@ -121,7 +121,7 @@ public class SerialDateTest extends TestCase {
   public void testWeekdayCodeToString() {
 
     final String test = SerialDate.weekdayCodeToString(SerialDate.SATURDAY);
-    assertEquals("星期六", test);
+    assertEquals("Saturday", test);
 
   }
 
@@ -131,14 +131,14 @@ public class SerialDateTest extends TestCase {
    */
   public void testStringToWeekday() {
 
-    int weekday = SerialDate.stringToWeekdayCode("星期三");
+    int weekday = SerialDate.stringToWeekdayCode("Wednesday");
     assertEquals(SerialDate.WEDNESDAY, weekday);
 
-    weekday = SerialDate.stringToWeekdayCode(" 星期三 ");
+    weekday = SerialDate.stringToWeekdayCode(" Wednesday ");
     assertEquals(SerialDate.WEDNESDAY, weekday);
 
-//    weekday = SerialDate.stringToWeekdayCode("周三");
-//    assertEquals(SerialDate.WEDNESDAY, weekday);
+    weekday = SerialDate.stringToWeekdayCode("Wed");
+    assertEquals(SerialDate.WEDNESDAY, weekday);
 
   }
 
@@ -148,13 +148,13 @@ public class SerialDateTest extends TestCase {
    */
   public void testStringToMonthCode() {
 
-    int m = SerialDate.stringToMonthCode("一月");
+    int m = SerialDate.stringToMonthCode("January");
     assertEquals(MonthConstants.JANUARY, m);
 
-    m = SerialDate.stringToMonthCode(" 一月 ");
+    m = SerialDate.stringToMonthCode(" January ");
     assertEquals(MonthConstants.JANUARY, m);
 
-    m = SerialDate.stringToMonthCode("1月");
+    m = SerialDate.stringToMonthCode("Jan");
     assertEquals(MonthConstants.JANUARY, m);
 
   }
@@ -165,7 +165,7 @@ public class SerialDateTest extends TestCase {
   public void testMonthCodeToStringCode() {
 
     final String test = SerialDate.monthCodeToString(MonthConstants.DECEMBER);
-    assertEquals("十二月", test);
+    assertEquals("December", test);
 
   }
 
