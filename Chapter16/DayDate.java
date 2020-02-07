@@ -93,12 +93,6 @@ public abstract class DayDate implements Comparable, Serializable {
         DATE_FORMAT_SYMBOLS = new SimpleDateFormat("d-MMMM-yyyy", Locale.US)
                                 .getDateFormatSymbols();
 
-    /** The lowest year value supported by this date format. */
-    public static final int MINIMUM_YEAR_SUPPORTED = 1900; // used in RelativeDayOfWeekRule.java, and we want to move it into SpreadsheetDate
-
-    /** The highest year value supported by this date format. */
-    public static final int MAXIMUM_YEAR_SUPPORTED = 9999; // used in RelativeDayOfWeekRule.java
-
     /** Useful constant for Monday. Equivalent to java.util.Calendar.MONDAY. */
     public static final int MONDAY = Calendar.MONDAY;
 
@@ -752,7 +746,7 @@ public abstract class DayDate implements Comparable, Serializable {
      */
     public static DayDate createInstance(final int day, final Month month,
                                          final int yyyy) {
-        return new SpreadsheetDate(day, month, yyyy);
+        return DayDateFactory.makeDate(day, month, yyyy);
     }
 
     /**
@@ -764,7 +758,7 @@ public abstract class DayDate implements Comparable, Serializable {
      * @return a instance of DayDate.
      */
     public static DayDate createInstance(final int serial) {
-        return new SpreadsheetDate(serial); //father class should NOT know it's concrete son (violate rule G7)
+        return DayDateFactory.makeDate(serial);
     }
 
     /**
@@ -775,13 +769,7 @@ public abstract class DayDate implements Comparable, Serializable {
      * @return a instance of DayDate.
      */
     public static DayDate createInstance(final java.util.Date date) {
-
-        final GregorianCalendar calendar = new GregorianCalendar();
-        calendar.setTime(date);
-        return new SpreadsheetDate(calendar.get(Calendar.DATE),
-                                   Month.make(calendar.get(Calendar.MONTH) + 1),
-                                   calendar.get(Calendar.YEAR));
-
+        return DayDateFactory.makeDate(date);
     }
 
     /**

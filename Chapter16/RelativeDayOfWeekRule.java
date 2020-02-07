@@ -174,8 +174,8 @@ public class RelativeDayOfWeekRule extends AnnualDateRule {
   public DayDate getDate(final int year) {
 
     // check argument...
-    if ((year < DayDate.MINIMUM_YEAR_SUPPORTED)
-        || (year > DayDate.MAXIMUM_YEAR_SUPPORTED)) {
+    if ((year < DayDateFactory.getMinimumYear())
+        || (year > DayDateFactory.getMaximumYear())) {
       throw new IllegalArgumentException(
           "RelativeDayOfWeekRule.getDate(): year outside valid range.");
     }

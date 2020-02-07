@@ -86,7 +86,13 @@ public class SpreadsheetDate extends DayDate {
     public static final int EARLIEST_DATE_ORDINAL = 2; // 1/1/1900
 
     public static final int LATEST_DATE_ORDINAL = 2958465; // 12/31/9999
-    
+
+    /** The lowest year value supported by this date format. */
+    public static final int MINIMUM_YEAR_SUPPORTED = 1900;
+
+    /** The highest year value supported by this date format. */
+    public static final int MAXIMUM_YEAR_SUPPORTED = 9999;
+
     /** 
      * The day number (1-Jan-1900 = 2, 2-Jan-1900 = 3, ..., 31-Dec-9999 = 
      * 2958465). 
@@ -101,6 +107,10 @@ public class SpreadsheetDate extends DayDate {
 
     /** The year (1900 to 9999). */
     private final int year;
+
+    public SpreadsheetDate(final int day, final int month, final int year) {
+        this(day, Month.make(month), year);
+    }
 
     /**
      * Creates a new date instance.
