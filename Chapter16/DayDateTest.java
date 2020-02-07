@@ -7,6 +7,7 @@ import java.util.GregorianCalendar;
 import static Chapter16.Day.*;
 import static Chapter16.DayDate.*;
 import static Chapter16.Month.*;
+import static Chapter16.WeekInMonth.*;
 
 /**
  * cp from jcommon-1.0.23/src/test/java/org/jfree/date
@@ -206,14 +207,6 @@ public class DayDateTest extends TestCase {
 //    assertEquals(DECEMBER, stringToMonthCode("DECEMBER"));
   }
 
-  public void testIsValidWeekInMothCode() throws Exception {
-    for (int w = 0; w <= 4; ++w) {
-      assertTrue(isValidWeekInMonthCode(w));
-    }
-    assertFalse(isValidWeekInMonthCode(5));
-    assertFalse(isValidWeekInMonthCode(-1));
-  }
-
   public void testIsLeapYear() throws Exception {
     assertFalse(isLeapYear(1900));
     assertFalse(isLeapYear(1901));
@@ -386,18 +379,11 @@ public class DayDateTest extends TestCase {
   }
 
   public void testWeekInMonthToString() throws Exception {
-    assertEquals("First", weekInMonthToString(FIRST_WEEK_IN_MONTH));
-    assertEquals("Second", weekInMonthToString(SECOND_WEEK_IN_MONTH));
-    assertEquals("Third", weekInMonthToString(THIRD_WEEK_IN_MONTH));
-    assertEquals("Fourth", weekInMonthToString(FOURTH_WEEK_IN_MONTH));
-    assertEquals("Last", weekInMonthToString(LAST_WEEK_IN_MONTH));
-
-    try {
-      weekInMonthToString(-1);
-      fail("Invalid week code should throw exception");
-    } catch (IllegalArgumentException e) {
-
-    }
+    assertEquals("First", weekInMonthToString(FIRST));
+    assertEquals("Second", weekInMonthToString(SECOND));
+    assertEquals("Third", weekInMonthToString(THIRD));
+    assertEquals("Fourth", weekInMonthToString(FOURTH));
+    assertEquals("Last", weekInMonthToString(LAST));
   }
 
   public void testRelativeToString() throws Exception {

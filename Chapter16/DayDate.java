@@ -66,21 +66,6 @@ public abstract class DayDate implements Comparable, Serializable {
     static final int[] LAST_DAY_OF_MONTH =
         {0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
 
-    /** A useful constant for referring to the first week in a month. */
-    public static final int FIRST_WEEK_IN_MONTH = 1;
-
-    /** A useful constant for referring to the second week in a month. */
-    public static final int SECOND_WEEK_IN_MONTH = 2;
-
-    /** A useful constant for referring to the third week in a month. */
-    public static final int THIRD_WEEK_IN_MONTH = 3;
-
-    /** A useful constant for referring to the fourth week in a month. */
-    public static final int FOURTH_WEEK_IN_MONTH = 4;
-
-    /** A useful constant for referring to the last week in a month. */
-    public static final int LAST_WEEK_IN_MONTH = 0;
-
     /** Useful range constant. */
     public static final int INCLUDE_NONE = 0;
 
@@ -310,27 +295,6 @@ public abstract class DayDate implements Comparable, Serializable {
             }
         }
         return Month.make(result);
-    }
-
-    /**
-     * Returns true if the supplied integer code represents a valid 
-     * week-in-the-month, and false otherwise.
-     *
-     * @param code  the code being checked for validity.
-     * @return <code>true</code> if the supplied integer code represents a 
-     *         valid week-in-the-month.
-     */
-    public static boolean isValidWeekInMonthCode(final int code) {
-
-        switch(code) {
-            case FIRST_WEEK_IN_MONTH: 
-            case SECOND_WEEK_IN_MONTH: 
-            case THIRD_WEEK_IN_MONTH: 
-            case FOURTH_WEEK_IN_MONTH: 
-            case LAST_WEEK_IN_MONTH: return true;
-            default: return false;
-        }
-
     }
 
     /**
@@ -566,14 +530,14 @@ public abstract class DayDate implements Comparable, Serializable {
      *
      * @return a string corresponding to the week-in-the-month code.
      */
-    public static String weekInMonthToString(final int count) {
+    public static String weekInMonthToString(final WeekInMonth count) {
 
         switch (count) {
-            case DayDate.FIRST_WEEK_IN_MONTH : return "First";
-            case DayDate.SECOND_WEEK_IN_MONTH : return "Second";
-            case DayDate.THIRD_WEEK_IN_MONTH : return "Third";
-            case DayDate.FOURTH_WEEK_IN_MONTH : return "Fourth";
-            case DayDate.LAST_WEEK_IN_MONTH : return "Last";
+            case FIRST: return "First";
+            case SECOND: return "Second";
+            case THIRD: return "Third";
+            case FOURTH: return "Fourth";
+            case LAST: return "Last";
             default :
                 throw new IllegalArgumentException("DayDate.weekInMonthToString(): invalid code.");
         }
