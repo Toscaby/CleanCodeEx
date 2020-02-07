@@ -30,7 +30,7 @@ public class DayAndMonthRule extends AnnualDateRule {
   }
 
   public void setDayOfMonth(int dayOfMonth) {
-    if (dayOfMonth >= 1 && dayOfMonth <= DayDate.LAST_DAY_OF_MONTH[this.month.index]) {
+    if (dayOfMonth >= 1 && dayOfMonth <= this.month.lastDay()) {
       this.dayOfMonth = dayOfMonth;
     } else {
       throw new IllegalArgumentException("DayAndMonthRule(): dayOfMonth outside valid range.");

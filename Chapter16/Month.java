@@ -1,5 +1,9 @@
 package Chapter16;
 
+import java.text.DateFormatSymbols;
+import java.text.SimpleDateFormat;
+import java.util.Locale;
+
 /**
  * @author Tosca
  * @date 7/2/2020
@@ -18,6 +22,13 @@ public enum Month {
   NOVEMBER(11),
   DECEMBER(12);
 
+  public final int index;
+  private static final DateFormatSymbols
+      dateSymbols = new SimpleDateFormat("d-MMMM-yyyy", Locale.US)
+      .getDateFormatSymbols();
+  static final int[] LAST_DAY_OF_MONTH =
+      {0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+
   Month(int index) {
     this.index = index;
   }
@@ -31,6 +42,48 @@ public enum Month {
     throw new IllegalArgumentException("Invalid month index " + monthIndex);
   }
 
-  public final int index;
+  public static String[] getMonthNames() {
+    return dateSymbols.getMonths();
+  }
+
+  public static String[] getShortMonthNames() {
+    return dateSymbols.getShortMonths();
+  }
+
+  public static Month parse(String s) {
+    s = s.trim();
+    for (Month month : Month.values()) {
+      if (month.matches(s)) {
+        return month;
+      }
+    }
+
+    try {
+      return make(Integer.parseInt(s));
+    } catch (NumberFormatException e) {
+    }
+    throw new IllegalArgumentException("Invalid month " + s);
+  }
+
+  private boolean matches(String s) {
+    return s.equalsIgnoreCase(toString()) ||
+        s.equalsIgnoreCase(toShortString());
+  }
+
+  public int lastDay() {
+    return LAST_DAY_OF_MONTH[index];
+  }
+
+  public int quarter() {
+    return 1+ ( index - 1) / 3;
+  }
+
+  public String toString() {
+    return dateSymbols.getMonths()[index - 1];
+  }
+
+  public String toShortString() {
+    return dateSymbols.getShortMonths()[index - 1];
+  }
 }
 
