@@ -60,49 +60,14 @@ import java.util.Locale;
  */
 @SuppressWarnings("unused")
 public abstract class DayDate implements Comparable, Serializable {
-    public static final DateFormatSymbols
-        DATE_FORMAT_SYMBOLS = new SimpleDateFormat("d-MMMM-yyyy", Locale.US)
-                                .getDateFormatSymbols();
 
     /** The number of days in each month in non leap years. */
     static final int[] LAST_DAY_OF_MONTH =
         {0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
 
-    public static Day stringToWeekdayCode(String s) {
-
-        final String[] shortWeekdayNames 
-            = DATE_FORMAT_SYMBOLS.getShortWeekdays();
-        final String[] weekDayNames = DATE_FORMAT_SYMBOLS.getWeekdays();
-
-        int result = -1;
-        s = s.trim();
-        for (int i = 0; i < weekDayNames.length; i++) {
-            if (s.equals(shortWeekdayNames[i])) {
-                result = i;
-                break;
-            }
-            if (s.equals(weekDayNames[i])) {
-                result = i;
-                break;
-            }
-        }
-        return Day.make(result);
-
-    }
-
-    /**
-     * Returns a string representing the supplied day-of-the-week.
-     * <P>
-     * Need to find a better approach.
-     *
-     * @param weekday  the day of the week.
-     *
-     * @return a string representing the supplied day-of-the-week.
-     */
-    public static String weekdayCodeToString(Day weekday) {
-        String[] weekdays = DATE_FORMAT_SYMBOLS.getWeekdays();
-        return weekdays[weekday.index];
-    }
+    private static final DateFormatSymbols
+        DATE_FORMAT_SYMBOLS = new SimpleDateFormat("d-MMMM-yyyy", Locale.US)
+        .getDateFormatSymbols();
 
     /**
      * Returns an array of month names.
