@@ -15,18 +15,6 @@ import static Chapter16.SerialDate.*;
  */
 public class SerialDateTest extends TestCase {
 
-  /** Date representing November 9. */
-  private SerialDate nov9Y2001;
-
-  /**
-   * Creates a new test case.
-   *
-   * @param name  the name.
-   */
-  public SerialDateTest(final String name) {
-    super(name);
-  }
-
   public void testIsValidWeekdayCode() throws Exception {
     for (int day = 1; day <= 7; day++) {
       assertTrue(isValidWeekdayCode(day));
@@ -36,7 +24,7 @@ public class SerialDateTest extends TestCase {
   }
 
   public void testStringWeekdayCode() throws Exception {
-    assertEquals(-1, stringToWeekdayCode("Love LZR"));
+    assertEquals(-1, stringToWeekdayCode("hello"));
     assertEquals(MONDAY, stringToWeekdayCode("Monday"));
     assertEquals(MONDAY, stringToWeekdayCode(" Monday "));
     assertEquals(MONDAY, stringToWeekdayCode("Mon"));
@@ -83,10 +71,6 @@ public class SerialDateTest extends TestCase {
 //    assertEquals(SUNDAY, stringToWeekdayCode("SUNDAY"));
   }
 
-  /**
-   * Problem that the conversion of days to strings returns the right result.  Actually, this
-   * result depends on the Locale so this test needs to be modified.
-   */
   public void testWeekdayCodeToString() throws Exception {
     assertEquals("Sunday", weekdayCodeToString(SUNDAY));
     assertEquals("Monday", weekdayCodeToString(MONDAY));
@@ -163,10 +147,6 @@ public class SerialDateTest extends TestCase {
     }
   }
 
-  /**
-   * Test the conversion of a string to a month.  Note that this test will fail if the default
-   * locale doesn't use English month names...devise a better test!
-   */
   public void testStringToMonthCode() throws Exception {
     assertEquals(JANUARY, stringToMonthCode("1"));
     assertEquals(FEBRUARY, stringToMonthCode("2"));
@@ -181,8 +161,8 @@ public class SerialDateTest extends TestCase {
     assertEquals(NOVEMBER, stringToMonthCode("11"));
     assertEquals(DECEMBER, stringToMonthCode("12"));
 
-// todo    assertEquals(-1, stringToMonthCode("0"));
-//    assertEquals(-1, stringToMonthCode("13"));
+    assertEquals(-1, stringToMonthCode("0"));
+    assertEquals(-1, stringToMonthCode("13"));
 
     assertEquals(-1, stringToMonthCode("Hello"));
 
@@ -335,10 +315,10 @@ public class SerialDateTest extends TestCase {
   }
 
   public void testGetPreviousDayOfWeek() throws Exception {
-    assertEquals(d(1, FEBRUARY, 2006), getPreviousDayOfWeek(FRIDAY, d(1, MARCH, 2006)));
-    assertEquals(d(1, FEBRUARY, 2006), getPreviousDayOfWeek(WEDNESDAY, d(1, MARCH, 2006)));
-    assertEquals(d(3, FEBRUARY, 2004), getPreviousDayOfWeek(SUNDAY, d(3, MARCH, 2004)));
-    assertEquals(d(5, FEBRUARY, 2004), getPreviousDayOfWeek(WEDNESDAY, d(5, JANUARY, 2005)));
+    assertEquals(d(24, FEBRUARY, 2006), getPreviousDayOfWeek(FRIDAY, d(1, MARCH, 2006)));
+    assertEquals(d(22, FEBRUARY, 2006), getPreviousDayOfWeek(WEDNESDAY, d(1, MARCH, 2006)));
+    assertEquals(d(29, FEBRUARY, 2004), getPreviousDayOfWeek(SUNDAY, d(3, MARCH, 2004)));
+    assertEquals(d(29, DECEMBER, 2004), getPreviousDayOfWeek(WEDNESDAY, d(5, JANUARY, 2005)));
 
     try {
       getPreviousDayOfWeek(-1, d(1, JANUARY, 2006));
@@ -349,7 +329,7 @@ public class SerialDateTest extends TestCase {
   }
 
   public void testGetFollowingDayOfWeek() throws Exception {
-//    assertEquals(d(1, JANUARY, 2005), getFollowingDayOfWeek(SATURDAY, d(25, DECEMBER, 2004)));
+    assertEquals(d(1, JANUARY, 2005), getFollowingDayOfWeek(SATURDAY, d(25, DECEMBER, 2004)));
     assertEquals(d(1, JANUARY, 2005), getFollowingDayOfWeek(SATURDAY, d(26, DECEMBER, 2004)));
     assertEquals(d(3, MARCH, 2004), getFollowingDayOfWeek(WEDNESDAY, d(28, FEBRUARY, 2004)));
 
@@ -370,7 +350,7 @@ public class SerialDateTest extends TestCase {
     assertEquals(d(23, APRIL, 2006), getNearestDayOfWeek(SUNDAY, d(21, APRIL, 2006)));
     assertEquals(d(23, APRIL, 2006), getNearestDayOfWeek(SUNDAY, d(22, APRIL, 2006)));
 
-// todo   assertEquals(d(17, APRIL, 2006), getNearestDayOfWeek(MONDAY, d(16, APRIL, 2006)));
+    assertEquals(d(17, APRIL, 2006), getNearestDayOfWeek(MONDAY, d(16, APRIL, 2006)));
     assertEquals(d(17, APRIL, 2006), getNearestDayOfWeek(MONDAY, d(17, APRIL, 2006)));
     assertEquals(d(17, APRIL, 2006), getNearestDayOfWeek(MONDAY, d(18, APRIL, 2006)));
     assertEquals(d(17, APRIL, 2006), getNearestDayOfWeek(MONDAY, d(19, APRIL, 2006)));
@@ -378,46 +358,46 @@ public class SerialDateTest extends TestCase {
     assertEquals(d(24, APRIL, 2006), getNearestDayOfWeek(MONDAY, d(21, APRIL, 2006)));
     assertEquals(d(24, APRIL, 2006), getNearestDayOfWeek(MONDAY, d(22, APRIL, 2006)));
 
-//    assertEquals(d(18, APRIL, 2006), getNearestDayOfWeek(TUESDAY, d(16, APRIL, 2006)));
-//    assertEquals(d(18, APRIL, 2006), getNearestDayOfWeek(TUESDAY, d(17, APRIL, 2006)));
+    assertEquals(d(18, APRIL, 2006), getNearestDayOfWeek(TUESDAY, d(16, APRIL, 2006)));
+    assertEquals(d(18, APRIL, 2006), getNearestDayOfWeek(TUESDAY, d(17, APRIL, 2006)));
     assertEquals(d(18, APRIL, 2006), getNearestDayOfWeek(TUESDAY, d(18, APRIL, 2006)));
     assertEquals(d(18, APRIL, 2006), getNearestDayOfWeek(TUESDAY, d(19, APRIL, 2006)));
     assertEquals(d(18, APRIL, 2006), getNearestDayOfWeek(TUESDAY, d(20, APRIL, 2006)));
     assertEquals(d(18, APRIL, 2006), getNearestDayOfWeek(TUESDAY, d(21, APRIL, 2006)));
     assertEquals(d(25, APRIL, 2006), getNearestDayOfWeek(TUESDAY, d(22, APRIL, 2006)));
 
-//    assertEquals(d(19, APRIL, 2006), getNearestDayOfWeek(WEDNESDAY, d(16, APRIL, 2006)));
-//    assertEquals(d(19, APRIL, 2006), getNearestDayOfWeek(WEDNESDAY, d(17, APRIL, 2006)));
-//    assertEquals(d(19, APRIL, 2006), getNearestDayOfWeek(WEDNESDAY, d(18, APRIL, 2006)));
+    assertEquals(d(19, APRIL, 2006), getNearestDayOfWeek(WEDNESDAY, d(16, APRIL, 2006)));
+    assertEquals(d(19, APRIL, 2006), getNearestDayOfWeek(WEDNESDAY, d(17, APRIL, 2006)));
+    assertEquals(d(19, APRIL, 2006), getNearestDayOfWeek(WEDNESDAY, d(18, APRIL, 2006)));
     assertEquals(d(19, APRIL, 2006), getNearestDayOfWeek(WEDNESDAY, d(19, APRIL, 2006)));
     assertEquals(d(19, APRIL, 2006), getNearestDayOfWeek(WEDNESDAY, d(20, APRIL, 2006)));
     assertEquals(d(19, APRIL, 2006), getNearestDayOfWeek(WEDNESDAY, d(21, APRIL, 2006)));
     assertEquals(d(19, APRIL, 2006), getNearestDayOfWeek(WEDNESDAY, d(22, APRIL, 2006)));
 
 
-//    assertEquals(d(13, APRIL, 2006), getNearestDayOfWeek(THURSDAY, d(16, APRIL, 2006)));
-//    assertEquals(d(20, APRIL, 2006), getNearestDayOfWeek(THURSDAY, d(17, APRIL, 2006)));
-//    assertEquals(d(20, APRIL, 2006), getNearestDayOfWeek(THURSDAY, d(18, APRIL, 2006)));
-//    assertEquals(d(20, APRIL, 2006), getNearestDayOfWeek(THURSDAY, d(19, APRIL, 2006)));
+    assertEquals(d(13, APRIL, 2006), getNearestDayOfWeek(THURSDAY, d(16, APRIL, 2006)));
+    assertEquals(d(20, APRIL, 2006), getNearestDayOfWeek(THURSDAY, d(17, APRIL, 2006)));
+    assertEquals(d(20, APRIL, 2006), getNearestDayOfWeek(THURSDAY, d(18, APRIL, 2006)));
+    assertEquals(d(20, APRIL, 2006), getNearestDayOfWeek(THURSDAY, d(19, APRIL, 2006)));
     assertEquals(d(20, APRIL, 2006), getNearestDayOfWeek(THURSDAY, d(20, APRIL, 2006)));
     assertEquals(d(20, APRIL, 2006), getNearestDayOfWeek(THURSDAY, d(21, APRIL, 2006)));
     assertEquals(d(20, APRIL, 2006), getNearestDayOfWeek(THURSDAY, d(22, APRIL, 2006)));
 
-//    assertEquals(d(14, APRIL, 2006), getNearestDayOfWeek(FRIDAY, d(16, APRIL, 2006)));
-//    assertEquals(d(14, APRIL, 2006), getNearestDayOfWeek(FRIDAY, d(17, APRIL, 2006)));
-//    assertEquals(d(21, APRIL, 2006), getNearestDayOfWeek(FRIDAY, d(18, APRIL, 2006)));
-//    assertEquals(d(21, APRIL, 2006), getNearestDayOfWeek(FRIDAY, d(19, APRIL, 2006)));
-//    assertEquals(d(21, APRIL, 2006), getNearestDayOfWeek(FRIDAY, d(20, APRIL, 2006)));
+    assertEquals(d(14, APRIL, 2006), getNearestDayOfWeek(FRIDAY, d(16, APRIL, 2006)));
+    assertEquals(d(14, APRIL, 2006), getNearestDayOfWeek(FRIDAY, d(17, APRIL, 2006)));
+    assertEquals(d(21, APRIL, 2006), getNearestDayOfWeek(FRIDAY, d(18, APRIL, 2006)));
+    assertEquals(d(21, APRIL, 2006), getNearestDayOfWeek(FRIDAY, d(19, APRIL, 2006)));
+    assertEquals(d(21, APRIL, 2006), getNearestDayOfWeek(FRIDAY, d(20, APRIL, 2006)));
     assertEquals(d(21, APRIL, 2006), getNearestDayOfWeek(FRIDAY, d(21, APRIL, 2006)));
     assertEquals(d(21, APRIL, 2006), getNearestDayOfWeek(FRIDAY, d(22, APRIL, 2006)));
 
-//    assertEquals(d(15, APRIL, 2006), getNearestDayOfWeek(FRIDAY, d(16, APRIL, 2006)));
-//    assertEquals(d(15, APRIL, 2006), getNearestDayOfWeek(FRIDAY, d(17, APRIL, 2006)));
-//    assertEquals(d(15, APRIL, 2006), getNearestDayOfWeek(FRIDAY, d(18, APRIL, 2006)));
-//    assertEquals(d(22, APRIL, 2006), getNearestDayOfWeek(FRIDAY, d(19, APRIL, 2006)));
-//    assertEquals(d(22, APRIL, 2006), getNearestDayOfWeek(FRIDAY, d(20, APRIL, 2006)));
-//    assertEquals(d(22, APRIL, 2006), getNearestDayOfWeek(FRIDAY, d(21, APRIL, 2006)));
-    assertEquals(d(22, APRIL, 2006), getNearestDayOfWeek(FRIDAY, d(22, APRIL, 2006)));
+    assertEquals(d(15, APRIL, 2006), getNearestDayOfWeek(SATURDAY, d(16, APRIL, 2006)));
+    assertEquals(d(15, APRIL, 2006), getNearestDayOfWeek(SATURDAY, d(17, APRIL, 2006)));
+    assertEquals(d(15, APRIL, 2006), getNearestDayOfWeek(SATURDAY, d(18, APRIL, 2006)));
+    assertEquals(d(22, APRIL, 2006), getNearestDayOfWeek(SATURDAY, d(19, APRIL, 2006)));
+    assertEquals(d(22, APRIL, 2006), getNearestDayOfWeek(SATURDAY, d(20, APRIL, 2006)));
+    assertEquals(d(22, APRIL, 2006), getNearestDayOfWeek(SATURDAY, d(21, APRIL, 2006)));
+    assertEquals(d(22, APRIL, 2006), getNearestDayOfWeek(SATURDAY, d(22, APRIL, 2006)));
 
     try {
       getNearestDayOfWeek(-1, d(1, JANUARY, 2006));
@@ -451,13 +431,12 @@ public class SerialDateTest extends TestCase {
     assertEquals("Fourth", weekInMonthToString(FOURTH_WEEK_IN_MONTH));
     assertEquals("Last", weekInMonthToString(LAST_WEEK_IN_MONTH));
 
-//    todo
-//    try {
-//      weekInMonthToString(-1);
-//      fail("Invalid week code should throw exception");
-//    } catch (IllegalArgumentException e) {
-//
-//    }
+    try {
+      weekInMonthToString(-1);
+      fail("Invalid week code should throw exception");
+    } catch (IllegalArgumentException e) {
+
+    }
   }
 
   public void testRelativeToString() throws Exception {
@@ -465,13 +444,12 @@ public class SerialDateTest extends TestCase {
     assertEquals("Nearest", relativeToString(NEAREST));
     assertEquals("Following", relativeToString(FOLLOWING));
 
-//    todo
-//    try {
-//      relativeToString(-1);
-//      fail("Invalid week code should throw exception");
-//    } catch (IllegalArgumentException e) {
-//
-//    }
+    try {
+      relativeToString(-1000);
+      fail("Invalid relative code should throw exception");
+    } catch (IllegalArgumentException e) {
+
+    }
   }
 
   public void testCreateInstanceFromDDMMYYYY()  throws Exception {

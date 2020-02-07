@@ -457,6 +457,7 @@ public abstract class SerialDate implements Comparable,
 
         // now search through the month names...
         if ((result < 1) || (result > 12)) {
+            result = -1;
             for (int i = 0; i < monthNames.length; i++) {
                 if (s.equals(shortMonthNames[i])) {
                     result = i + 1;
@@ -684,7 +685,7 @@ public abstract class SerialDate implements Comparable,
         // find the date...
         final int adjust;
         final int baseDOW = base.getDayOfWeek();
-        if (baseDOW > targetWeekday) {
+        if (baseDOW >= targetWeekday) {
             adjust = 7 + Math.min(0, targetWeekday - baseDOW);
         }
         else {
@@ -716,9 +717,9 @@ public abstract class SerialDate implements Comparable,
 
         // find the date...
         final int baseDOW = base.getDayOfWeek();
-        int adjust = -Math.abs(targetDOW - baseDOW);
+        int adjust = targetDOW - baseDOW;
         if (adjust >= 4) {
-            adjust = 7 - adjust;
+            adjust = -7 + adjust;
         }
         if (adjust <= -4) {
             adjust = 7 + adjust;
@@ -759,7 +760,7 @@ public abstract class SerialDate implements Comparable,
             case SerialDate.FOURTH_WEEK_IN_MONTH : return "Fourth";
             case SerialDate.LAST_WEEK_IN_MONTH : return "Last";
             default :
-                return "SerialDate.weekInMonthToString(): invalid code.";
+                throw new IllegalArgumentException("SerialDate.weekInMonthToString(): invalid code.");
         }
 
     }
@@ -779,7 +780,7 @@ public abstract class SerialDate implements Comparable,
             case SerialDate.PRECEDING : return "Preceding";
             case SerialDate.NEAREST : return "Nearest";
             case SerialDate.FOLLOWING : return "Following";
-            default : return "ERROR : Relative To String";
+            default : throw new IllegalArgumentException("ERROR : Relative To String");
         }
 
     }
