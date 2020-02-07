@@ -387,16 +387,9 @@ public class DayDateTest extends TestCase {
   }
 
   public void testRelativeToString() throws Exception {
-    assertEquals("Preceding", relativeToString(PRECEDING));
-    assertEquals("Nearest", relativeToString(NEAREST));
-    assertEquals("Following", relativeToString(FOLLOWING));
-
-    try {
-      relativeToString(-1000);
-      fail("Invalid relative code should throw exception");
-    } catch (IllegalArgumentException e) {
-
-    }
+    assertEquals("Preceding", relativeToString(WeekdayRange.LAST));
+    assertEquals("Nearest", relativeToString(WeekdayRange.NEAREST));
+    assertEquals("Following", relativeToString(WeekdayRange.NEXT));
   }
 
   public void testCreateInstanceFromDDMMYYYY()  throws Exception {

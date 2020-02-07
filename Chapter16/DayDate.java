@@ -38,6 +38,8 @@ import java.io.Serializable;
 import java.text.*;
 import java.util.*;
 
+import static Chapter16.WeekdayRange.*;
+
 /**
  *  An abstract class that defines our requirements for manipulating dates,
  *  without tying down a particular implementation.
@@ -65,24 +67,6 @@ public abstract class DayDate implements Comparable, Serializable {
     /** The number of days in each month in non leap years. */
     static final int[] LAST_DAY_OF_MONTH =
         {0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
-
-    /** 
-     * Useful constant for specifying a day of the week relative to a fixed 
-     * date. 
-     */
-    public static final int PRECEDING = -1;
-
-    /** 
-     * Useful constant for specifying a day of the week relative to a fixed 
-     * date. 
-     */
-    public static final int NEAREST = 0;
-
-    /** 
-     * Useful constant for specifying a day of the week relative to a fixed 
-     * date. 
-     */
-    public static final int FOLLOWING = 1;
 
     /** A description for the date. */
     private String description;
@@ -537,16 +521,16 @@ public abstract class DayDate implements Comparable, Serializable {
      * <P>
      * Need to find a better approach.
      *
-     * @param relative  a constant representing the 'relative'.
+     * @param range  a constant representing the 'relative'.
      *
      * @return a string representing the supplied 'relative'.
      */
-    public static String relativeToString(final int relative) {
+    public static String relativeToString(final WeekdayRange range) {
 
-        switch (relative) {
-            case DayDate.PRECEDING : return "Preceding";
-            case DayDate.NEAREST : return "Nearest";
-            case DayDate.FOLLOWING : return "Following";
+        switch (range) {
+            case LAST : return "Preceding";
+            case NEAREST : return "Nearest";
+            case NEXT : return "Following";
             default : throw new IllegalArgumentException("ERROR : Relative To String");
         }
 
