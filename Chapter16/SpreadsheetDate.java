@@ -82,6 +82,10 @@ public class SpreadsheetDate extends DayDate {
 
     /** For serialization. */
     private static final long serialVersionUID = -2039586705374454461L;
+
+    public static final int EARLIEST_DATE_ORDINAL = 2; // 1/1/1900
+
+    public static final int LATEST_DATE_ORDINAL = 2958465; // 12/31/9999
     
     /** 
      * The day number (1-Jan-1900 = 2, 2-Jan-1900 = 3, ..., 31-Dec-9999 = 

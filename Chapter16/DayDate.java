@@ -93,10 +93,6 @@ public abstract class DayDate implements Comparable, Serializable {
         DATE_FORMAT_SYMBOLS = new SimpleDateFormat("d-MMMM-yyyy", Locale.US)
                                 .getDateFormatSymbols();
 
-    public static final int EARLIEST_DATE_ORDINAL = 2; // 1/1/1900
-
-    public static final int LATEST_DATE_ORDINAL = 2958465; // 12/31/9999
-
     /** The lowest year value supported by this date format. */
     public static final int MINIMUM_YEAR_SUPPORTED = 1900;
 
