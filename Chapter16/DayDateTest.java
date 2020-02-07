@@ -4,16 +4,16 @@ import junit.framework.TestCase;
 
 import java.util.GregorianCalendar;
 
-import static Chapter16.SerialDate.*;
+import static Chapter16.DayDate.*;
 
 /**
  * cp from jcommon-1.0.23/src/test/java/org/jfree/date
  *
- * Some JUnit tests for the {@link SerialDate} class.
+ * Some JUnit tests for the {@link DayDate} class.
  * @author Tosca
  * @date 2/2/2020
  */
-public class SerialDateTest extends TestCase {
+public class DayDateTest extends TestCase {
 
   public void testIsValidWeekdayCode() throws Exception {
     for (int day = 1; day <= 7; day++) {
@@ -126,18 +126,18 @@ public class SerialDateTest extends TestCase {
     assertEquals("November", monthCodeToString(NOVEMBER));
     assertEquals("December", monthCodeToString(DECEMBER));
 
-    assertEquals("Jan", monthCodeToString(JANUARY));
-    assertEquals("Feb", monthCodeToString(FEBRUARY));
-    assertEquals("Mar", monthCodeToString(MARCH));
-    assertEquals("Apr", monthCodeToString(APRIL));
-    assertEquals("May", monthCodeToString(MAY));
-    assertEquals("Jun", monthCodeToString(JUNE));
-    assertEquals("Jul", monthCodeToString(JULY));
-    assertEquals("Aug", monthCodeToString(AUGUST));
-    assertEquals("Sep", monthCodeToString(SEPTEMBER));
-    assertEquals("Oct", monthCodeToString(OCTOBER));
-    assertEquals("Nov", monthCodeToString(NOVEMBER));
-    assertEquals("Dec", monthCodeToString(DECEMBER));
+    assertEquals("Jan", monthCodeToString(JANUARY, true));
+    assertEquals("Feb", monthCodeToString(FEBRUARY, true));
+    assertEquals("Mar", monthCodeToString(MARCH, true));
+    assertEquals("Apr", monthCodeToString(APRIL, true));
+    assertEquals("May", monthCodeToString(MAY, true));
+    assertEquals("Jun", monthCodeToString(JUNE, true));
+    assertEquals("Jul", monthCodeToString(JULY, true));
+    assertEquals("Aug", monthCodeToString(AUGUST, true));
+    assertEquals("Sep", monthCodeToString(SEPTEMBER, true));
+    assertEquals("Oct", monthCodeToString(OCTOBER, true));
+    assertEquals("Nov", monthCodeToString(NOVEMBER, true));
+    assertEquals("Dec", monthCodeToString(DECEMBER, true));
 
     try {
       monthCodeToString(-1);
@@ -229,7 +229,7 @@ public class SerialDateTest extends TestCase {
       assertTrue(isValidWeekInMonthCode(w));
     }
     assertFalse(isValidWeekInMonthCode(5));
-    assertFalse(isValidWeekInMonthCode(0));
+    assertFalse(isValidWeekInMonthCode(-1));
   }
 
   public void testIsLeapYear() throws Exception {
@@ -278,11 +278,11 @@ public class SerialDateTest extends TestCase {
     assertEquals(31, lastDayOfMonth(OCTOBER, 1901));
     assertEquals(30, lastDayOfMonth(NOVEMBER, 1901));
     assertEquals(31, lastDayOfMonth(DECEMBER, 1901));
-    assertEquals(29, lastDayOfMonth(DECEMBER, 1904));
+    assertEquals(29, lastDayOfMonth(FEBRUARY, 1904));
   }
 
   public void testAddDays() throws Exception {
-    SerialDate newYears = d(1, JANUARY, 1900);
+    DayDate newYears = d(1, JANUARY, 1900);
     assertEquals(d(2, JANUARY, 1900), addDays(1, newYears));
     assertEquals(d(1, FEBRUARY, 1900), addDays(31, newYears));
     assertEquals(d(1, JANUARY, 1901), addDays(365, newYears));
@@ -408,7 +408,7 @@ public class SerialDateTest extends TestCase {
   }
 
   public void testEndOfCurrentMonth() throws Exception {
-    SerialDate d = SerialDate.createInstance(2);
+    DayDate d = DayDate.createInstance(2);
     assertEquals(d(31, JANUARY, 2006), d.getEndOfCurrentMonth(d(1, JANUARY, 2006)));
     assertEquals(d(28, FEBRUARY, 2006), d.getEndOfCurrentMonth(d(1, FEBRUARY, 2006)));
     assertEquals(d(31, MARCH, 2006), d.getEndOfCurrentMonth(d(1, MARCH, 2006)));
@@ -453,7 +453,7 @@ public class SerialDateTest extends TestCase {
   }
 
   public void testCreateInstanceFromDDMMYYYY()  throws Exception {
-    SerialDate date = createInstance(1, JANUARY, 1900);
+    DayDate date = createInstance(1, JANUARY, 1900);
     assertEquals(1, date.getDayOfMonth());
     assertEquals(JANUARY, date.getMonth());
     assertEquals(1900, date.getYYYY());
@@ -473,6 +473,6 @@ public class SerialDateTest extends TestCase {
   }
 
   public static void main(String[] args) {
-    junit.textui.TestRunner.run(SerialDateTest.class);
+    junit.textui.TestRunner.run(DayDateTest.class);
   }
 }
