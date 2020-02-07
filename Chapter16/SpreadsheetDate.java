@@ -57,7 +57,6 @@ package Chapter16;
 
 import java.util.Calendar;
 import java.util.Date;
-import static Chapter16.DayDate.Month;
 
 /**
  * Represents a date using an integer, in a similar fashion to the
@@ -147,7 +146,7 @@ public class SpreadsheetDate extends DayDate {
      */
     public SpreadsheetDate(final int serial) {
 
-        if ((serial >= SERIAL_LOWER_BOUND) && (serial <= SERIAL_UPPER_BOUND)) {
+        if ((serial >= EARLIEST_DATE_ORDINAL) && (serial <= LATEST_DATE_ORDINAL)) {
             this.serial = serial;
         }
         else {
@@ -157,7 +156,7 @@ public class SpreadsheetDate extends DayDate {
 
         // the day-month-year needs to be synchronised with the serial number...
       // get the year from the serial date
-      final int days = this.serial - SERIAL_LOWER_BOUND;
+      final int days = this.serial - EARLIEST_DATE_ORDINAL;
       // overestimated because we ignored leap days
       final int overestimatedYYYY = 1900 + (days / 365);
       final int leaps = DayDate.leapYearCount(overestimatedYYYY);
