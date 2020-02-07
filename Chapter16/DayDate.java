@@ -94,10 +94,10 @@ public abstract class DayDate implements Comparable, Serializable {
                                 .getDateFormatSymbols();
 
     /** The lowest year value supported by this date format. */
-    public static final int MINIMUM_YEAR_SUPPORTED = 1900;
+    public static final int MINIMUM_YEAR_SUPPORTED = 1900; // used in RelativeDayOfWeekRule.java, and we want to move it into SpreadsheetDate
 
     /** The highest year value supported by this date format. */
-    public static final int MAXIMUM_YEAR_SUPPORTED = 9999;
+    public static final int MAXIMUM_YEAR_SUPPORTED = 9999; // used in RelativeDayOfWeekRule.java
 
     /** Useful constant for Monday. Equivalent to java.util.Calendar.MONDAY. */
     public static final int MONDAY = Calendar.MONDAY;
@@ -764,7 +764,7 @@ public abstract class DayDate implements Comparable, Serializable {
      * @return a instance of DayDate.
      */
     public static DayDate createInstance(final int serial) {
-        return new SpreadsheetDate(serial);
+        return new SpreadsheetDate(serial); //father class should NOT know it's concrete son (violate rule G7)
     }
 
     /**
