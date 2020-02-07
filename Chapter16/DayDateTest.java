@@ -5,6 +5,7 @@ import junit.framework.TestCase;
 import java.util.GregorianCalendar;
 
 import static Chapter16.DayDate.*;
+import static Chapter16.DayDate.Month.*;
 
 /**
  * cp from jcommon-1.0.23/src/test/java/org/jfree/date
@@ -81,14 +82,6 @@ public class DayDateTest extends TestCase {
     assertEquals("Saturday", weekdayCodeToString(SATURDAY));
   }
 
-  public void testIsValidMonthCode() throws Exception {
-    for (int i = 1; i <=12; i++) {
-      assertTrue(isValidMonthCode(i));
-    }
-    assertFalse(isValidMonthCode(0));
-    assertFalse(isValidMonthCode(13));
-  }
-
   public void testMonthToQuarter() throws Exception {
     assertEquals(1, monthCodeToQuarter(JANUARY));
     assertEquals(1, monthCodeToQuarter(FEBRUARY));
@@ -102,14 +95,6 @@ public class DayDateTest extends TestCase {
     assertEquals(4, monthCodeToQuarter(OCTOBER));
     assertEquals(4, monthCodeToQuarter(NOVEMBER));
     assertEquals(4, monthCodeToQuarter(DECEMBER));
-
-    try {
-      monthCodeToQuarter(-1);
-      fail("Invalid month code should throw exception");
-    } catch (IllegalArgumentException e) {
-
-    }
-
   }
 
   public void testMonthCodeToString() throws Exception {
@@ -138,13 +123,6 @@ public class DayDateTest extends TestCase {
     assertEquals("Oct", monthCodeToString(OCTOBER, true));
     assertEquals("Nov", monthCodeToString(NOVEMBER, true));
     assertEquals("Dec", monthCodeToString(DECEMBER, true));
-
-    try {
-      monthCodeToString(-1);
-      fail("Invalid month Code should throw exception");
-    } catch (IllegalArgumentException e) {
-
-    }
   }
 
   public void testStringToMonthCode() throws Exception {
@@ -161,14 +139,18 @@ public class DayDateTest extends TestCase {
     assertEquals(NOVEMBER, stringToMonthCode("11"));
     assertEquals(DECEMBER, stringToMonthCode("12"));
 
-    assertEquals(-1, stringToMonthCode("0"));
-    assertEquals(-1, stringToMonthCode("13"));
-
-    assertEquals(-1, stringToMonthCode("Hello"));
-
     for (int m = 1; m <= 12; ++m) {
-      assertEquals(m, stringToMonthCode(monthCodeToString(m, false)));
-      assertEquals(m, stringToMonthCode(monthCodeToString(m, true)));
+      assertEquals(Month.make(m), stringToMonthCode(monthCodeToString(Month.make(m), false)));
+      assertEquals(Month.make(m), stringToMonthCode(monthCodeToString(Month.make(m), true)));
+    }
+
+    try {
+      stringToMonthCode("0");
+      stringToMonthCode("13");
+      stringToMonthCode("Hello");
+      fail("Invalid month string should throw exception");
+    } catch (IllegalArgumentException e) {
+
     }
 
 //    assertEquals(JANUARY, stringToMonthCode("Jan"));
@@ -289,7 +271,7 @@ public class DayDateTest extends TestCase {
     assertEquals(d(31, DECEMBER, 1904), addDays(5 * 365, newYears));
   }
 
-  private static SpreadsheetDate d(int day, int month, int year) {
+  private static SpreadsheetDate d(int day, Month month, int year) {
     return new SpreadsheetDate(day, month, year);
   }
 
