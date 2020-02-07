@@ -4,8 +4,9 @@ import junit.framework.TestCase;
 
 import java.util.GregorianCalendar;
 
+import static Chapter16.Day.*;
 import static Chapter16.DayDate.*;
-import static Chapter16.DayDate.Month.*;
+import static Chapter16.Month.*;
 
 /**
  * cp from jcommon-1.0.23/src/test/java/org/jfree/date
@@ -16,16 +17,7 @@ import static Chapter16.DayDate.Month.*;
  */
 public class DayDateTest extends TestCase {
 
-  public void testIsValidWeekdayCode() throws Exception {
-    for (int day = 1; day <= 7; day++) {
-      assertTrue(isValidWeekdayCode(day));
-    }
-    assertFalse(isValidWeekdayCode(0));
-    assertFalse(isValidWeekdayCode(8));
-  }
-
   public void testStringWeekdayCode() throws Exception {
-    assertEquals(-1, stringToWeekdayCode("hello"));
     assertEquals(MONDAY, stringToWeekdayCode("Monday"));
     assertEquals(MONDAY, stringToWeekdayCode(" Monday "));
     assertEquals(MONDAY, stringToWeekdayCode("Mon"));
@@ -70,6 +62,14 @@ public class DayDateTest extends TestCase {
 //    assertEquals(SUNDAY, stringToWeekdayCode("sun"));
 //    assertEquals(SUNDAY, stringToWeekdayCode("sunday"));
 //    assertEquals(SUNDAY, stringToWeekdayCode("SUNDAY"));
+
+    try {
+      stringToWeekdayCode("hello");
+      fail("Invalid day index exception should be thrown.");
+    } catch (IllegalArgumentException e) {
+
+    }
+
   }
 
   public void testWeekdayCodeToString() throws Exception {
@@ -301,26 +301,12 @@ public class DayDateTest extends TestCase {
     assertEquals(d(22, FEBRUARY, 2006), getPreviousDayOfWeek(WEDNESDAY, d(1, MARCH, 2006)));
     assertEquals(d(29, FEBRUARY, 2004), getPreviousDayOfWeek(SUNDAY, d(3, MARCH, 2004)));
     assertEquals(d(29, DECEMBER, 2004), getPreviousDayOfWeek(WEDNESDAY, d(5, JANUARY, 2005)));
-
-    try {
-      getPreviousDayOfWeek(-1, d(1, JANUARY, 2006));
-      fail("Invalid day of week code should throw exception");
-    } catch (IllegalArgumentException e) {
-
-    }
   }
 
   public void testGetFollowingDayOfWeek() throws Exception {
     assertEquals(d(1, JANUARY, 2005), getFollowingDayOfWeek(SATURDAY, d(25, DECEMBER, 2004)));
     assertEquals(d(1, JANUARY, 2005), getFollowingDayOfWeek(SATURDAY, d(26, DECEMBER, 2004)));
     assertEquals(d(3, MARCH, 2004), getFollowingDayOfWeek(WEDNESDAY, d(28, FEBRUARY, 2004)));
-
-    try {
-      getFollowingDayOfWeek(-1, d(1, JANUARY, 2006));
-      fail("Invalid day of week code should throw exception");
-    } catch (IllegalArgumentException e) {
-
-    }
   }
 
   public void testGetNearestDayOfWeek() throws Exception {
@@ -380,13 +366,6 @@ public class DayDateTest extends TestCase {
     assertEquals(d(22, APRIL, 2006), getNearestDayOfWeek(SATURDAY, d(20, APRIL, 2006)));
     assertEquals(d(22, APRIL, 2006), getNearestDayOfWeek(SATURDAY, d(21, APRIL, 2006)));
     assertEquals(d(22, APRIL, 2006), getNearestDayOfWeek(SATURDAY, d(22, APRIL, 2006)));
-
-    try {
-      getNearestDayOfWeek(-1, d(1, JANUARY, 2006));
-      fail("Invalid day of week code should throw exception");
-    } catch (IllegalArgumentException e) {
-
-    }
   }
 
   public void testEndOfCurrentMonth() throws Exception {

@@ -14,7 +14,7 @@ public class SpreadsheetDateFactory extends DayDateFactory {
   }
 
   @Override
-  protected DayDate _makeDate(int day, DayDate.Month month, int year) {
+  protected DayDate _makeDate(int day, Month month, int year) {
     return new SpreadsheetDate(day, month, year);
   }
 
@@ -29,7 +29,7 @@ public class SpreadsheetDateFactory extends DayDateFactory {
     calendar.setTime(date);
     return new SpreadsheetDate(
         calendar.get(Calendar.DATE),
-        DayDate.Month.make(calendar.get(Calendar.MONTH) + 1),
+        Month.make(calendar.get(Calendar.MONTH) + 1),
         calendar.get(Calendar.YEAR));
   }
 
