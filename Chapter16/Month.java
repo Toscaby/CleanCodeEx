@@ -22,7 +22,7 @@ public enum Month {
   NOVEMBER(11),
   DECEMBER(12);
 
-  public final int index;
+  private final int index;
   private static final DateFormatSymbols
       dateSymbols = new SimpleDateFormat("d-MMMM-yyyy", Locale.US)
       .getDateFormatSymbols();
@@ -33,21 +33,13 @@ public enum Month {
     this.index = index;
   }
 
-  public static Month make(int monthIndex) {
+  public static Month fromInt(int monthIndex) {
     for (Month m : Month.values()) {
       if (m.index == monthIndex) {
         return m;
       }
     }
     throw new IllegalArgumentException("Invalid month index " + monthIndex);
-  }
-
-  public static String[] getMonthNames() {
-    return dateSymbols.getMonths();
-  }
-
-  public static String[] getShortMonthNames() {
-    return dateSymbols.getShortMonths();
   }
 
   public static Month parse(String s) {
@@ -59,7 +51,7 @@ public enum Month {
     }
 
     try {
-      return make(Integer.parseInt(s));
+      return fromInt(Integer.parseInt(s));
     } catch (NumberFormatException e) {
     }
     throw new IllegalArgumentException("Invalid month " + s);
@@ -85,5 +77,7 @@ public enum Month {
   public String toShortString() {
     return dateSymbols.getShortMonths()[index - 1];
   }
+
+  public int toInt() {return index;}
 }
 

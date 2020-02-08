@@ -35,6 +35,8 @@
 package Chapter16;
 
 import java.io.Serializable;
+import java.util.Calendar;
+import java.util.Date;
 
 /**
  *  An abstract class that defines our requirements for manipulating dates,
@@ -57,270 +59,66 @@ import java.io.Serializable;
  */
 @SuppressWarnings("unused")
 public abstract class DayDate implements Comparable, Serializable {
-    /**
-     * Determines whether or not the specified year is a leap year.
-     *
-     * @param yyyy  the year (in the range 1900 to 9999).
-     *
-     * @return <code>true</code> if the specified year is a leap year.
-     */
-    public static boolean isLeapYear(int yyyy) {
 
-        if ((yyyy % 4) != 0) {
-            return false;
+    public DayDate plusDays(int days) {
+        return DayDateFactory.makeDate(getOrdinalDay() + days);
+    }
+
+    public DayDate plusMonths(int months) {
+        int thisMonthAsOrdinal = 12 * getYear() + getMonth().toInt() - 1;
+        int resultMonthAsOrdinal = thisMonthAsOrdinal + months;
+        int resultYear = resultMonthAsOrdinal / 12;
+        Month resultMonth = Month.fromInt(resultMonthAsOrdinal % 12 + 1);
+        int lastDayOfResultMonth = DayUtil.lastDayOfMonth(resultMonth, resultYear);
+        int resultDay = Math.min(getDayOfMonth(), lastDayOfResultMonth);
+        return DayDateFactory.makeDate(resultDay, resultMonth, resultYear);
+    }
+
+    public DayDate plusYears(int years) {
+        int resultYear = getYear() + years;
+        int lastDayOfMonthInResultYear = DayUtil.lastDayOfMonth(getMonth(), resultYear);
+        int resultDay = Math.min(getDayOfMonth(), lastDayOfMonthInResultYear);
+
+        return DayDateFactory.makeDate(resultDay, getMonth(), resultYear);
+    }
+
+    public DayDate getPreviousDayOfWeek(Day targetWeekday) {
+        int offsetToTarget = targetWeekday.toInt() - getDayOfWeek().toInt();
+        if (offsetToTarget >= 0) {
+            offsetToTarget -= 7;
         }
-        else if (yyyy % 400 == 0) {
-            return true;
+        return plusDays(offsetToTarget);
+    }
+
+    public DayDate getFollowingDayOfWeek(Day targetWeekday) {
+        int offsetToTarget = targetWeekday.toInt() - getDayOfWeek().toInt();
+        if (offsetToTarget <= 0) {
+            offsetToTarget += 7;
         }
-        else return yyyy % 100 != 0;
+        return plusDays(offsetToTarget);
+    }
+
+    public DayDate getNearestDayOfWeek(Day targetDOW) {
+        int offsetToThisWeeksTarget = targetDOW.toInt() - getDayOfWeek().toInt();
+        if (offsetToThisWeeksTarget >= 4) {
+            offsetToThisWeeksTarget = -7 + offsetToThisWeeksTarget;
+        }
+        if (offsetToThisWeeksTarget <= -4) {
+            offsetToThisWeeksTarget = 7 + offsetToThisWeeksTarget;
+        }
+        return plusDays(offsetToThisWeeksTarget);
 
     }
 
-    /**
-     * Returns the number of leap years from 1900 to the specified year 
-     * INCLUSIVE.
-     * <P>
-     * Note that 1900 is not a leap year.
-     *
-     * @param yyyy  the year (in the range 1900 to 9999).
-     *
-     * @return the number of leap years from 1900 to the specified year.
-     */
-    public static int leapYearCount(int yyyy) {
-
-        int leap4 = (yyyy - 1896) / 4;
-        int leap100 = (yyyy - 1800) / 100;
-        int leap400 = (yyyy - 1600) / 400;
-        return leap4 - leap100 + leap400;
-
+    public DayDate getEndOfCurrentMonth() {
+        Month month = getMonth();
+        int year = getYear();
+        int lastDay = DayUtil.lastDayOfMonth(month, year);
+        return DayDateFactory.makeDate(lastDay, month, year);
     }
 
     /**
-     * Returns the number of the last day of the month, taking into account
-     * leap years.
-     *
-     * @param month  the month.
-     * @param yyyy  the year (in the range 1900 to 9999).
-     *
-     * @return the number of the last day of the month.
-     */
-    public static int lastDayOfMonth(Month month, int yyyy) {
-
-        int result = month.lastDay();
-        if (month != Month.FEBRUARY) {
-            return result;
-        }
-        else if (isLeapYear(yyyy)) {
-            return result + 1;
-        }
-        else {
-            return result;
-        }
-
-    }
-
-    /**
-     * Creates a new date by adding the specified number of days to the base 
-     * date.
-     *
-     * @param days  the number of days to add (can be negative).
-     * @param base  the base date.
-     *
-     * @return a new date.
-     */
-    public static DayDate addDays(int days, DayDate base) {
-
-        int serialDayNumber = base.toSerial() + days;
-        return DayDate.createInstance(serialDayNumber);
-
-    }
-
-    /**
-     * Creates a new date by adding the specified number of months to the base 
-     * date.
-     * <P>
-     * If the base date is close to the end of the month, the day on the result
-     * may be adjusted slightly:  31 May + 1 month = 30 June.
-     *
-     * @param months  the number of months to add (can be negative).
-     * @param base  the base date.
-     *
-     * @return a new date.
-     */
-    public static DayDate addMonths(int months,
-                                    DayDate base) {
-
-        int yy = (12 * base.getYYYY() + base.getMonth().index + months - 1)
-                       / 12;
-        int mm = (12 * base.getYYYY() + base.getMonth().index + months - 1)
-                       % 12 + 1;
-        int dd = Math.min(
-            base.getDayOfMonth(), DayDate.lastDayOfMonth(Month.make(mm), yy)
-        );
-        return DayDate.createInstance(dd, Month.make(mm), yy);
-
-    }
-
-    /**
-     * Creates a new date by adding the specified number of years to the base 
-     * date.
-     *
-     * @param years  the number of years to add (can be negative).
-     * @param base  the base date.
-     *
-     * @return A new date.
-     */
-    public static DayDate addYears(int years, DayDate base) {
-
-        int baseY = base.getYYYY();
-        int baseM = base.getMonth().index;
-        int baseD = base.getDayOfMonth();
-
-        int targetY = baseY + years;
-        int targetD = Math.min(
-            baseD, DayDate.lastDayOfMonth(Month.make(baseM), targetY)
-        );
-
-        return DayDate.createInstance(targetD, Month.make(baseM), targetY);
-
-    }
-
-    /**
-     * Returns the latest date that falls on the specified day-of-the-week and 
-     * is BEFORE the base date.
-     *
-     * @param targetWeekday  a code for the target day-of-the-week.
-     * @param base  the base date.
-     *
-     * @return the latest date that falls on the specified day-of-the-week and 
-     *         is BEFORE the base date.
-     */
-    public static DayDate getPreviousDayOfWeek(Day targetWeekday,
-                                               DayDate base) {
-        // find the date...
-        int adjust;
-        int baseDOW = base.getDayOfWeek();
-        if (baseDOW > targetWeekday.index) {
-            adjust = Math.min(0, targetWeekday.index - baseDOW);
-        }
-        else {
-            adjust = -7 + Math.max(0, targetWeekday.index - baseDOW);
-        }
-
-        return DayDate.addDays(adjust, base);
-
-    }
-
-    /**
-     * Returns the earliest date that falls on the specified day-of-the-week
-     * and is AFTER the base date.
-     *
-     * @param targetWeekday  a code for the target day-of-the-week.
-     * @param base  the base date.
-     *
-     * @return the earliest date that falls on the specified day-of-the-week 
-     *         and is AFTER the base date.
-     */
-    public static DayDate getFollowingDayOfWeek(Day targetWeekday,
-                                                DayDate base) {
-
-        // find the date...
-        int adjust;
-        int baseDOW = base.getDayOfWeek();
-        if (baseDOW >= targetWeekday.index) {
-            adjust = 7 + Math.min(0, targetWeekday.index - baseDOW);
-        }
-        else {
-            adjust = Math.max(0, targetWeekday.index - baseDOW);
-        }
-
-        return DayDate.addDays(adjust, base);
-    }
-
-    /**
-     * Returns the date that falls on the specified day-of-the-week and is
-     * CLOSEST to the base date.
-     *
-     * @param targetDOW  a code for the target day-of-the-week.
-     * @param base  the base date.
-     *
-     * @return the date that falls on the specified day-of-the-week and is 
-     *         CLOSEST to the base date.
-     */
-    public static DayDate getNearestDayOfWeek(Day targetDOW,
-                                              DayDate base) {
-        // find the date...
-        int baseDOW = base.getDayOfWeek();
-        int adjust = targetDOW.index - baseDOW;
-        if (adjust >= 4) {
-            adjust = -7 + adjust;
-        }
-        if (adjust <= -4) {
-            adjust = 7 + adjust;
-        }
-        return DayDate.addDays(adjust, base);
-
-    }
-
-    /**
-     * Rolls the date forward to the last day of the month.
-     *
-     * @param base  the base date.
-     *
-     * @return a new serial date.
-     */
-    public DayDate getEndOfCurrentMonth(DayDate base) {
-        int last = DayDate.lastDayOfMonth(
-            base.getMonth(), base.getYYYY()
-        );
-        return DayDate.createInstance(last, base.getMonth(), base.getYYYY());
-    }
-
-    /**
-     * Returns a string corresponding to the week-in-the-month code.
-     * <P>
-     * Need to find a better approach.
-     *
-     * @param count  an integer code representing the week-in-the-month.
-     *
-     * @return a string corresponding to the week-in-the-month code.
-     */
-    public static String weekInMonthToString(WeekInMonth count) {
-
-        switch (count) {
-            case FIRST: return "First";
-            case SECOND: return "Second";
-            case THIRD: return "Third";
-            case FOURTH: return "Fourth";
-            case LAST: return "Last";
-            default :
-                throw new IllegalArgumentException("DayDate.weekInMonthToString(): invalid code.");
-        }
-
-    }
-
-    /**
-     * Returns a string representing the supplied 'relative'.
-     * <P>
-     * Need to find a better approach.
-     *
-     * @param range  a constant representing the 'relative'.
-     *
-     * @return a string representing the supplied 'relative'.
-     */
-    public static String relativeToString(WeekdayRange range) {
-
-        switch (range) {
-            case LAST : return "Preceding";
-            case NEAREST : return "Nearest";
-            case NEXT : return "Following";
-            default : throw new IllegalArgumentException("ERROR : Relative To String");
-        }
-
-    }
-
-    /**
-     * Factory method that returns an instance of some concrete subclass of 
+     * Factory method that returns an instance of some concrete subclass of
      * {@link DayDate}.
      *
      * @param day  the day (1-31).
@@ -335,7 +133,7 @@ public abstract class DayDate implements Comparable, Serializable {
     }
 
     /**
-     * Factory method that returns an instance of some concrete subclass of 
+     * Factory method that returns an instance of some concrete subclass of
      * {@link DayDate}.
      *
      * @param serial  the serial number for the day (1 January 1900 = 2).
@@ -346,16 +144,10 @@ public abstract class DayDate implements Comparable, Serializable {
         return DayDateFactory.makeDate(serial);
     }
 
-    /**
-     * Factory method that returns an instance of a subclass of DayDate.
-     *
-     * @param date  A Java date object.
-     *
-     * @return a instance of DayDate.
-     */
-    public static DayDate createInstance(java.util.Date date) {
-        return DayDateFactory.makeDate(date);
+    public static DayDate createInstance(Date serial) {
+        return DayDateFactory.makeDate(serial);
     }
+
 
     /**
      * Returns the serial number for the date, where 1 January 1900 = 2 (this
@@ -364,7 +156,7 @@ public abstract class DayDate implements Comparable, Serializable {
      *
      * @return the serial number for the date.
      */
-    public abstract int toSerial();
+    public abstract int getOrdinalDay();
 
     /**
      * Returns a java.util.Date.  Since java.util.Date has more precision than
@@ -372,7 +164,16 @@ public abstract class DayDate implements Comparable, Serializable {
      *
      * @return this as <code>java.util.Date</code>.
      */
-    public abstract java.util.Date toDate();
+    /**
+     * Returns a <code>java.util.Date</code> equivalent to this date.
+     *
+     * @return The date.
+     */
+    public Date toDate() {
+        final Calendar calendar = Calendar.getInstance();
+        calendar.set(getYear(), getMonth().toInt() - 1, getDayOfMonth(), 0, 0, 0);
+        return calendar.getTime();
+    }
 
     /**
      * Converts the date to a string.
@@ -381,7 +182,7 @@ public abstract class DayDate implements Comparable, Serializable {
      */
     public String toString() {
         return getDayOfMonth() + "-" + getMonth().toString()
-                               + "-" + getYYYY();
+                               + "-" + getYear();
     }
 
     /**
@@ -389,7 +190,7 @@ public abstract class DayDate implements Comparable, Serializable {
      *
      * @return the year.
      */
-    public abstract int getYYYY();
+    public abstract int getYear();
 
     /**
      * Returns the month (January = 1, February = 2, March = 3).
@@ -406,24 +207,35 @@ public abstract class DayDate implements Comparable, Serializable {
     public abstract int getDayOfMonth();
 
     /**
-     * Returns the day of the week.
+     * Returns a code representing the day of the week.
+     * <P>
+     * The codes are defined in the {@link DayDate} class as:
+     * <code>SUNDAY</code>, <code>MONDAY</code>, <code>TUESDAY</code>,
+     * <code>WEDNESDAY</code>, <code>THURSDAY</code>, <code>FRIDAY</code>, and
+     * <code>SATURDAY</code>.
      *
-     * @return the day of the week.
+     * @return A code representing the day of the week.
      */
-    public abstract int getDayOfWeek();
+    public Day getDayOfWeek() {
+        Day startingDay = getDayOfWeekForOrdinalZero();
+        int startingOffset = startingDay.toInt() - Day.SUNDAY.toInt();
+        return Day.fromInt((getOrdinalDay() + startingOffset) % 7 + 1);
+    }
+
+    public abstract Day getDayOfWeekForOrdinalZero();
 
     /**
      * Returns the difference (in days) between this date and the specified 
      * 'other' date.
-     * <P>
-     * The result is positive if this date is after the 'other' date and
-     * negative if it is before the 'other' date.
      *
      * @param other  the date being compared to.
      *
-     * @return the difference between this and the other date.
+     * @return The difference (in days) between this date and the specified
+     *         'other' date.
      */
-    public abstract int compare(DayDate other);
+    public int daySince(final DayDate other) {
+        return getOrdinalDay() - other.getOrdinalDay();
+    }
 
     /**
      * Returns true if this DayDate represents the same date as the
@@ -434,18 +246,22 @@ public abstract class DayDate implements Comparable, Serializable {
      * @return <code>true</code> if this DayDate represents the same date as
      *         the specified DayDate.
      */
-    public abstract boolean isOn(DayDate other);
+    public boolean isOn(final DayDate other) {
+        return (getOrdinalDay() == other.getOrdinalDay());
+    }
 
     /**
      * Returns true if this DayDate represents an earlier date compared to
      * the specified DayDate.
      *
-     * @param other  The date being compared to.
+     * @param other  the date being compared to.
      *
      * @return <code>true</code> if this DayDate represents an earlier date
      *         compared to the specified DayDate.
      */
-    public abstract boolean isBefore(DayDate other);
+    public boolean isBefore(final DayDate other) {
+        return (getOrdinalDay() < other.getOrdinalDay());
+    }
 
     /**
      * Returns true if this DayDate represents the same date as the
@@ -456,7 +272,9 @@ public abstract class DayDate implements Comparable, Serializable {
      * @return <code>true</code> if this DayDate represents the same date
      *         as the specified DayDate.
      */
-    public abstract boolean isOnOrBefore(DayDate other);
+    public boolean isOnOrBefore(final DayDate other) {
+        return (getOrdinalDay() <= other.getOrdinalDay());
+    }
 
     /**
      * Returns true if this DayDate represents the same date as the
@@ -467,7 +285,9 @@ public abstract class DayDate implements Comparable, Serializable {
      * @return <code>true</code> if this DayDate represents the same date
      *         as the specified DayDate.
      */
-    public abstract boolean isAfter(DayDate other);
+    public boolean isAfter(final DayDate other) {
+        return (getOrdinalDay() > other.getOrdinalDay());
+    }
 
     /**
      * Returns true if this DayDate represents the same date as the
@@ -475,10 +295,12 @@ public abstract class DayDate implements Comparable, Serializable {
      *
      * @param other  the date being compared to.
      *
-     * @return <code>true</code> if this DayDate represents the same date
-     *         as the specified DayDate.
+     * @return <code>true</code> if this DayDate represents the same date as
+     *         the specified DayDate.
      */
-    public abstract boolean isOnOrAfter(DayDate other);
+    public boolean isOnOrAfter(final DayDate other) {
+        return (getOrdinalDay() >= other.getOrdinalDay());
+    }
 
     /**
      * Returns <code>true</code> if this {@link DayDate} is within the
@@ -490,58 +312,28 @@ public abstract class DayDate implements Comparable, Serializable {
      *
      * @return A boolean.
      */
-    public abstract boolean isInRange(DayDate d1, DayDate d2);
+    public boolean isInRange(final DayDate d1, final DayDate d2) {
+        DateInterval open = DateInterval.OPEN;
+        return isInRange(d1, d2, open);
+    }
 
     /**
-     * Returns <code>true</code> if this {@link DayDate} is within the
-     * specified range (caller specifies whether or not the end-points are 
-     * included).  The date order of d1 and d2 is not important.
+     * Returns true if this DayDate is within the specified range (caller
+     * specifies whether or not the end-points are included).  The order of d1
+     * and d2 is not important.
      *
-     * @param d1  a boundary date for the range.
-     * @param d2  the other boundary date for the range.
-     * @param include  a code that controls whether or not the start and end 
+     * @param d1  one boundary date for the range.
+     * @param d2  a second boundary date for the range.
+     * @param interval  a code that controls whether or not the start and end
      *                 dates are included in the range.
      *
-     * @return A boolean.
+     * @return <code>true</code> if this DayDate is within the specified
+     *         range.
      */
-    public abstract boolean isInRange(DayDate d1, DayDate d2,
-                                      DateInterval include);
-
-    /**
-     * Returns the latest date that falls on the specified day-of-the-week and
-     * is BEFORE this date.
-     *
-     * @param targetDOW  a code for the target day-of-the-week.
-     *
-     * @return the latest date that falls on the specified day-of-the-week and
-     *         is BEFORE this date.
-     */
-    public DayDate getPreviousDayOfWeek(Day targetDOW) {
-        return getPreviousDayOfWeek(targetDOW, this);
+    public boolean isInRange(final DayDate d1, final DayDate d2,
+                             final DateInterval interval) {
+        int left = Math.min(d1.getOrdinalDay(), d2.getOrdinalDay());
+        int right = Math.max(d1.getOrdinalDay(), d2.getOrdinalDay());
+        return interval.isIn(getOrdinalDay(), left, right);
     }
-
-    /**
-     * Returns the earliest date that falls on the specified day-of-the-week
-     * and is AFTER this date.
-     *
-     * @param targetDOW  a code for the target day-of-the-week.
-     *
-     * @return the earliest date that falls on the specified day-of-the-week
-     *         and is AFTER this date.
-     */
-    public DayDate getFollowingDayOfWeek(Day targetDOW) {
-        return getFollowingDayOfWeek(targetDOW, this);
-    }
-
-    /**
-     * Returns the nearest date that falls on the specified day-of-the-week.
-     *
-     * @param targetDOW  a code for the target day-of-the-week.
-     *
-     * @return the nearest date that falls on the specified day-of-the-week.
-     */
-    public DayDate getNearestDayOfWeek(Day targetDOW) {
-        return getNearestDayOfWeek(targetDOW, this);
-    }
-
 }

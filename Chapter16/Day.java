@@ -18,7 +18,7 @@ public enum Day {
   SATURDAY(Calendar.SATURDAY),
   SUNDAY(Calendar.SUNDAY);
 
-  public final int index;
+  private final int index;
   private static final DateFormatSymbols
       dateSymbols = new SimpleDateFormat("d-MMMM-yyyy", Locale.US)
       .getDateFormatSymbols();
@@ -27,7 +27,7 @@ public enum Day {
     this.index = index;
   }
 
-  public static Day make(int weekdayIndex) {
+  public static Day fromInt(int weekdayIndex) {
     for (Day d : Day.values()) {
       if (d.index == weekdayIndex) {
         return d;
@@ -55,5 +55,7 @@ public enum Day {
   public String toString() {
     return dateSymbols.getWeekdays()[index];
   }
+
+  public int toInt() {return index;}
 }
 
