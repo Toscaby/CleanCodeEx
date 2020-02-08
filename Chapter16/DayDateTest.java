@@ -2,10 +2,7 @@ package Chapter16;
 
 import junit.framework.TestCase;
 
-import java.util.GregorianCalendar;
-
 import static Chapter16.Day.*;
-import static Chapter16.DayDate.*;
 import static Chapter16.Month.*;
 
 /**
@@ -207,34 +204,34 @@ public class DayDateTest extends TestCase {
   }
 
   public void testIsLeapYear() throws Exception {
-    assertFalse(DayUtil.isLeapYear(1900));
-    assertFalse(DayUtil.isLeapYear(1901));
-    assertFalse(DayUtil.isLeapYear(1902));
-    assertFalse(DayUtil.isLeapYear(1903));
-    assertTrue(DayUtil.isLeapYear(1904));
-    assertTrue(DayUtil.isLeapYear(1908));
-    assertFalse(DayUtil.isLeapYear(1955));
-    assertTrue(DayUtil.isLeapYear(1964));
-    assertTrue(DayUtil.isLeapYear(1980));
-    assertTrue(DayUtil.isLeapYear(2000));
-    assertFalse(DayUtil.isLeapYear(2002));
-    assertFalse(DayUtil.isLeapYear(2100));
+    assertFalse(DateUtil.isLeapYear(1900));
+    assertFalse(DateUtil.isLeapYear(1901));
+    assertFalse(DateUtil.isLeapYear(1902));
+    assertFalse(DateUtil.isLeapYear(1903));
+    assertTrue(DateUtil.isLeapYear(1904));
+    assertTrue(DateUtil.isLeapYear(1908));
+    assertFalse(DateUtil.isLeapYear(1955));
+    assertTrue(DateUtil.isLeapYear(1964));
+    assertTrue(DateUtil.isLeapYear(1980));
+    assertTrue(DateUtil.isLeapYear(2000));
+    assertFalse(DateUtil.isLeapYear(2002));
+    assertFalse(DateUtil.isLeapYear(2100));
   }
 
   public void testLastDayOfMonth() throws Exception {
-    assertEquals(31, DayUtil.lastDayOfMonth(JANUARY, 1901));
-    assertEquals(28, DayUtil.lastDayOfMonth(FEBRUARY, 1901));
-    assertEquals(31, DayUtil.lastDayOfMonth(MARCH, 1901));
-    assertEquals(30, DayUtil.lastDayOfMonth(APRIL, 1901));
-    assertEquals(31, DayUtil.lastDayOfMonth(MAY, 1901));
-    assertEquals(30, DayUtil.lastDayOfMonth(JUNE, 1901));
-    assertEquals(31, DayUtil.lastDayOfMonth(JULY, 1901));
-    assertEquals(31, DayUtil.lastDayOfMonth(AUGUST, 1901));
-    assertEquals(30, DayUtil.lastDayOfMonth(SEPTEMBER, 1901));
-    assertEquals(31, DayUtil.lastDayOfMonth(OCTOBER, 1901));
-    assertEquals(30, DayUtil.lastDayOfMonth(NOVEMBER, 1901));
-    assertEquals(31, DayUtil.lastDayOfMonth(DECEMBER, 1901));
-    assertEquals(29, DayUtil.lastDayOfMonth(FEBRUARY, 1904));
+    assertEquals(31, DateUtil.lastDayOfMonth(JANUARY, 1901));
+    assertEquals(28, DateUtil.lastDayOfMonth(FEBRUARY, 1901));
+    assertEquals(31, DateUtil.lastDayOfMonth(MARCH, 1901));
+    assertEquals(30, DateUtil.lastDayOfMonth(APRIL, 1901));
+    assertEquals(31, DateUtil.lastDayOfMonth(MAY, 1901));
+    assertEquals(30, DateUtil.lastDayOfMonth(JUNE, 1901));
+    assertEquals(31, DateUtil.lastDayOfMonth(JULY, 1901));
+    assertEquals(31, DateUtil.lastDayOfMonth(AUGUST, 1901));
+    assertEquals(30, DateUtil.lastDayOfMonth(SEPTEMBER, 1901));
+    assertEquals(31, DateUtil.lastDayOfMonth(OCTOBER, 1901));
+    assertEquals(30, DateUtil.lastDayOfMonth(NOVEMBER, 1901));
+    assertEquals(31, DateUtil.lastDayOfMonth(DECEMBER, 1901));
+    assertEquals(29, DateUtil.lastDayOfMonth(FEBRUARY, 1904));
   }
 
   public void testAddDays() throws Exception {
@@ -343,40 +340,20 @@ public class DayDateTest extends TestCase {
   }
 
   public void testEndOfCurrentMonth() throws Exception {
-    DayDate d = DayDate.createInstance(2);
-    assertEquals(d(31, JANUARY, 2006), d(1, JANUARY, 2006).getEndOfCurrentMonth());
-    assertEquals(d(28, FEBRUARY, 2006), d(1, FEBRUARY, 2006).getEndOfCurrentMonth());
-    assertEquals(d(31, MARCH, 2006), d(1, MARCH, 2006).getEndOfCurrentMonth());
-    assertEquals(d(30, APRIL, 2006), d(1, APRIL, 2006).getEndOfCurrentMonth());
-    assertEquals(d(31, MAY, 2006), d(1, MAY, 2006).getEndOfCurrentMonth());
-    assertEquals(d(30, JUNE, 2006), d(1, JUNE, 2006).getEndOfCurrentMonth());
-    assertEquals(d(31, JULY, 2006), d(1, JULY, 2006).getEndOfCurrentMonth());
-    assertEquals(d(31, AUGUST, 2006), d(1, AUGUST, 2006).getEndOfCurrentMonth());
-    assertEquals(d(30, SEPTEMBER, 2006), d(1, SEPTEMBER, 2006).getEndOfCurrentMonth());
-    assertEquals(d(31, OCTOBER, 2006), d(1, OCTOBER, 2006).getEndOfCurrentMonth());
-    assertEquals(d(30, NOVEMBER, 2006), d(1, NOVEMBER, 2006).getEndOfCurrentMonth());
-    assertEquals(d(31, DECEMBER, 2006), d(1, DECEMBER, 2006).getEndOfCurrentMonth());
-    assertEquals(d(29, FEBRUARY, 2008), d(1, FEBRUARY, 2008).getEndOfCurrentMonth());
-  }
-
-  public void testCreateInstanceFromDDMMYYYY()  throws Exception {
-    DayDate date = createInstance(1, JANUARY, 1900);
-    assertEquals(1, date.getDayOfMonth());
-    assertEquals(JANUARY, date.getMonth());
-    assertEquals(1900, date.getYear());
-    assertEquals(2, date.getOrdinalDay());
-  }
-
-  public void testCreateInstanceFromSerial()  throws Exception {
-    assertEquals(d(1, JANUARY, 1900), createInstance(2));
-    assertEquals(d(1, JANUARY, 1901), createInstance(367));
-  }
-
-  public void testCreateInstanceFromJavaDate()  throws Exception {
-    assertEquals(d(1, JANUARY, 1900),
-        createInstance(new GregorianCalendar(1900, 0, 1).getTime()));
-    assertEquals(d(1, JANUARY, 2006),
-        createInstance(new GregorianCalendar(2006, 0, 1).getTime()));
+    DayDate d = DayDateFactory.makeDate(2);
+    assertEquals(d(31, JANUARY, 2006), d(1, JANUARY, 2006).getEndOfMonth());
+    assertEquals(d(28, FEBRUARY, 2006), d(1, FEBRUARY, 2006).getEndOfMonth());
+    assertEquals(d(31, MARCH, 2006), d(1, MARCH, 2006).getEndOfMonth());
+    assertEquals(d(30, APRIL, 2006), d(1, APRIL, 2006).getEndOfMonth());
+    assertEquals(d(31, MAY, 2006), d(1, MAY, 2006).getEndOfMonth());
+    assertEquals(d(30, JUNE, 2006), d(1, JUNE, 2006).getEndOfMonth());
+    assertEquals(d(31, JULY, 2006), d(1, JULY, 2006).getEndOfMonth());
+    assertEquals(d(31, AUGUST, 2006), d(1, AUGUST, 2006).getEndOfMonth());
+    assertEquals(d(30, SEPTEMBER, 2006), d(1, SEPTEMBER, 2006).getEndOfMonth());
+    assertEquals(d(31, OCTOBER, 2006), d(1, OCTOBER, 2006).getEndOfMonth());
+    assertEquals(d(30, NOVEMBER, 2006), d(1, NOVEMBER, 2006).getEndOfMonth());
+    assertEquals(d(31, DECEMBER, 2006), d(1, DECEMBER, 2006).getEndOfMonth());
+    assertEquals(d(29, FEBRUARY, 2008), d(1, FEBRUARY, 2008).getEndOfMonth());
   }
 
   public static void main(String[] args) {

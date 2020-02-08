@@ -18,7 +18,7 @@ public class DayAndMonthRule extends AnnualDateRule {
   }
 
   public DayDate getDate(int yyyy) {
-    return DayDate.createInstance(this.dayOfMonth, this.month, yyyy);
+    return DayDateFactory.makeDate(this.dayOfMonth, this.month, yyyy);
   }
 
   public int getDayOfMonth() {

@@ -8,7 +8,7 @@ import java.util.Locale;
  * @author Tosca
  * @date 8/2/2020
  */
-public class DayUtil {
+public class DateUtil {
   private static final DateFormatSymbols
       dateSymbols = new SimpleDateFormat("d-MMMM-yyyy", Locale.US)
       .getDateFormatSymbols();
@@ -35,5 +35,12 @@ public class DayUtil {
     } else {
       return month.lastDay();
     }
+  }
+
+  public static int leapYearCount(int yyyy) {
+    int leap4 = (yyyy - 1896) / 4;
+    int leap100 = (yyyy - 1800) / 100;
+    int leap400 = (yyyy - 1600) / 400;
+    return leap4 - leap100 + leap400;
   }
 }
