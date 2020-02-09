@@ -5,4 +5,5 @@ package Chapter12.donotduplicate;
  * @date 9/2/2020
  */
 public class RenderedOp {
+  public void dispose() {}
 }
